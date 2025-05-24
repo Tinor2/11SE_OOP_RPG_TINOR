@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG.md for tracking changes
 
 ### Changed
-- N/A
+- Simplified and reorganized project guidelines in PROJECT_RULES.md (2025-05-24 14:57:10 +10:00)
 
 ### Deprecated
 - N/A

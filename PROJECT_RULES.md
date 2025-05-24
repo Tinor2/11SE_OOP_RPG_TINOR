@@ -1,33 +1,104 @@
 # RPG Project Guidelines
 
-This document provides simple, clear rules for our RPG game project. These guidelines help keep our code clean and easy to understand.
-
 ## Language and Style
 
-- Use **Australian/British English** spelling throughout all documentation and code comments:
-  - colour (not color)
-  - behaviour (not behavior)
-  - organise (not organize)
-  - centre (not center)
+- Use **Australian/British English** spelling:
+  - colour, behaviour, organise, centre
   - licence (noun), license (verb)
   - practise (verb), practice (noun)
-  - customise (not customize)
-  - analyse (not analyze)
-  - defence (not defense)
-  - initialise (not initialize)
+  - customise, analyse, defence, initialise
 
-## Related Documentation
+## Project Structure
 
-For more information, refer to:
-- [README.md](README.md) - Project overview and setup instructions
-- [CHANGELOG.md](CHANGELOG.md) - Version history and changes
-- [ROADMAP.md](ROADMAP.md) - Future development plans
-- [UML_class_diagram.md](UML_class_diagram.md) - Class structure and relationships
+### Documentation
+- [README.md](README.md) - Project overview and setup
+- [CHANGELOG.md](CHANGELOG.md) - Version history
+- [ROADMAP.md](ROADMAP.md) - Future plans
+- [UML_class_diagram.md](UML_class_diagram.md) - Class structure
 
-## 1. Writing Good Code
+## Code Quality
 
-### Keep It Simple
-- Write code that's easy to read and understand
+### Code Style
+- Keep it simple and readable
+- Break tasks into small functions (<30 lines)
+- Use clear, descriptive names
+  - Good: `player_health`, `calculate_damage()`
+  - Bad: `x`, `foo()`, `temp`
+
+### Code Style
+- Follow PEP 8:
+  - 4 spaces for indentation
+  - Spaces around operators
+  - Lowercase with underscores
+
+### Comments
+- Explain "why" not "what"
+  ```python
+  # Bad (what)
+  x = x + 1  # Add 1 to x
+  
+  # Good (why)
+  x = x + 1  # Compensate for zero-based indexing
+  ```
+
+## File Organization
+
+- Single implementation file: `rpg_oop_concepts.py`
+- Keep related code together
+- Use clear section comments
+
+## Git Workflow
+
+### Commits
+- Clear, concise messages (50 chars max)
+- Present tense verbs:
+  - "Add player movement"
+  - "Fix combat damage"
+  - "Update README"
+
+### Branching
+- Feature branches:
+  ```
+  git checkout -b feature/player-jump
+  git checkout -b fix/combat-bug
+  ```
+
+## Documentation
+
+### Code Documentation
+- Docstrings for all functions and classes
+  ```python
+  def calculate_damage(attacker, defender):
+      """
+      Calculate damage dealt from attacker to defender.
+      
+      Args:
+          attacker: The attacking character
+          defender: The defending character
+          
+      Returns:
+          int: The amount of damage dealt
+      """
+      # Function code here
+  ```
+- Update changelog for noticeable changes
+- For removed features:
+  - Delete entries for immediate removals
+  - Mark as "Removed" for delayed removals
+
+### Project Documentation
+- Keep `README.md` updated with:
+  - Installation and setup
+  - Basic controls
+  - Contribution guidelines
+
+## Best Practices
+
+- Don't overcomplicate things
+- Ask questions if unsure
+- Keep documentation updated
+- Test changes before commits
+- Write clear pull request descriptions
 - Break big tasks into small, focused functions (try to keep functions under 30 lines)
 - Use clear, descriptive names for variables and functions
   - Good: `player_health`, `calculate_damage()`
@@ -92,6 +163,8 @@ Keep the implementation simple with a single file:
       """
       # Function code here
   ```
+- Consistently update the changelog, whenever any noticable changes are made.
+- If you are asked to remove a change (i.e. a feature was implemented, but immeadiately after was removed), delete the entry with in the changelog. However if the change was not immeadiately removed, don't delete the entry, but instead mark it as "Removed". The point of this is to keep the changelog useful, as well as a method to provide context to any reader. By deleting any unnecesary entries, everything will be kept to be clean and consice.
 
 ### Project Documentation
 - Keep `README.md` updated with:
