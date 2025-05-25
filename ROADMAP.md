@@ -2,7 +2,7 @@
 
 This document outlines the development plan for the RPG OOP demonstration project, now organized into a modular package structure that demonstrates object-oriented programming concepts.
 
-## Current Status (v0.2.0)
+## Current Status (v0.3.0)
 
 **Completed**:
 - [x] Refactored codebase into a modular package structure
@@ -18,17 +18,21 @@ This document outlines the development plan for the RPG OOP demonstration projec
 
 ## Next Steps
 
-### 1. Testing Implementation (Current Focus)
-- [ ] Create a `tests/` directory with unit tests for each module
-- [ ] Implement test coverage reporting
-- [ ] Add CI/CD pipeline for automated testing
-- [ ] Add integration tests for game flow
-
-### 2. Game Features
+### 1. Game Features (Current Focus)
 - [ ] Add character inventory system
 - [ ] Implement experience and leveling system
 - [ ] Add more enemy types with unique abilities
 - [ ] Create different weapon types and rarities
+- [ ] Add special abilities and skills
+- [ ] Implement a combat status effect system
+
+### 2. Enhanced Gameplay
+- [ ] Add quest system with objectives
+- [ ] Implement day/night cycle
+- [ ] Add NPCs with dialogue trees
+- [ ] Create multiple game areas/maps
+
+
 
 ### 3. Code Quality & Documentation
 - [ ] Add more detailed docstrings
@@ -41,6 +45,14 @@ This document outlines the development plan for the RPG OOP demonstration projec
 - [ ] Multiple game difficulty levels
 - [ ] Player achievements system
 - [ ] Sound effects and music
+
+### Archived: Testing Implementation
+- [x] Created `tests/` directory with unit tests for each module
+- [x] Implemented test coverage reporting
+- [x] Set up pytest configuration
+- [x] Added test fixtures and mocks
+- [ ] Add CI/CD pipeline for automated testing (Deferred)
+- [ ] Add integration tests for game flow (Deferred)
 
 ## Project Structure
 
