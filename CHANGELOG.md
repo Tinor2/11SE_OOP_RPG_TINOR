@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-05-26
+
+### Added
+- Comprehensive game mechanics implementation
+- Turn-based combat system
+- Console UI with clear battle status displays
+- Victory/defeat conditions and end-game scenarios
+- Test script for verifying imports and basic functionality
+
+### Changed
+- Improved code organization with better separation of concerns
+- Enhanced documentation and type hints throughout the codebase
+- Updated README with clear instructions and project structure
+- Streamlined game flow and user experience
+
+### Fixed
+- Resolved any existing bugs in the combat system
+- Fixed import paths and module organization
+
 ## [0.2.0] - 2025-05-26
 
 ### Added

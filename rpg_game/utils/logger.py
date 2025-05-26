@@ -38,7 +38,7 @@ class GameLogger:
         """
         # Get current time for the log
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-        log_message = f"[{timestamp}] COMBAT LOG: {attacker.name} attacked {defender.name} for {damage} damage"
+        log_message = f"[{timestamp}] COMBAT LOG: {attacker.get_name()} attacked {defender.get_name()} for {damage} damage"
         if self.log_to_console:
             print(log_message)
         # Future enhancement: could log to file, database, etc.

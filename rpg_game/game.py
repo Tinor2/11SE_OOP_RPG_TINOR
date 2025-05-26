@@ -54,7 +54,11 @@ class Game:
         """Display the game introduction and set up the player character."""
         clear_screen()
         print(WELCOME_MESSAGE)
-        player_name = input("Enter your character's name: ").capitalize()
+        try:
+            player_name = input("Enter your character's name: ").capitalize()
+        except EOFError:
+            print("\nUsing default name 'Hero' since input is not available")
+            player_name = "Hero"
         print(INTRO_MESSAGE.format(player_name=player_name))
         self.setup_game(player_name)
 
@@ -110,7 +114,11 @@ class Game:
             The index of the chosen option
         """
         while True:
-            user_input = input(prompt).capitalize()
+            try:
+                user_input = input(prompt).capitalize()
+            except EOFError:
+                print("\nUsing default weapon 'Rock' since input is not available")
+                return options.index("Rock")
             if user_input in options:
                 return options.index(user_input)
             print("Invalid input, please try again.")
@@ -131,14 +139,34 @@ class Game:
             self.display_combat_status(player, enemy)
             # Pass the logger to the attack methods
             damage_dealt = player.attack(enemy, self.logger)
-            print(f"You dealt {damage_dealt} damage to {enemy.name}.")
+            # Player attack
+            if damage_dealt > 0:
+                print(f"\n  You strike {enemy.get_name()} with your {player._weapon.get_name()}!")
+                print(f"  {enemy.get_name()} takes {damage_dealt} damage!")
+                if enemy.get_health() < 30:
+                    print(f"  {enemy.get_name()} is wounded and looks desperate!")
+            else:
+                print(f"\n  You swing at {enemy.get_name()} but miss!")
+            
+            # Enemy attack
+            damage_received = enemy.attack(player, self.logger)
+            if damage_received > 0:
+                print(f"\n  {enemy.get_name()} attacks you!")
+                print(f"  You take {damage_received} damage!")
+                if player.get_health() < 30:
+                    print(f"  You're badly hurt! Use a potion if you have one!")
+            else:
+                print(f"\n  {enemy.get_name()} swings at you but misses!")
+            
+            # Show current status
+            print("\nCurrent Status:")
+            player.display()
+            print("-" * SEPARATOR_LENGTH)
+            enemy.display()
+            press_enter()
             if enemy.get_health() <= 0:
                 self.print_victory_message(enemy)
                 return True
-
-            # Pass the logger to the attack methods
-            damage_received = enemy.attack(player, self.logger)
-            print(f"{enemy.name} dealt {damage_received} damage to you.")
             if player.get_health() <= 0:
                 self.print_defeat_message(enemy)
                 return False
@@ -154,8 +182,8 @@ class Game:
             enemy: The enemy character
         """
         clear_screen()
-        level = "LEVEL 1" if enemy.name == "Goblin King" else "LEVEL 2"
-        print(f"\n=============> {level}: {enemy.name} <=============")
+        level = "LEVEL 1" if enemy.get_name() == "Goblin King" else "LEVEL 2"
+        print(f"\n=============> {level}: {enemy.get_name()} <=============")
         player.display()
         print("-" * SEPARATOR_LENGTH)
         enemy.display()
@@ -181,10 +209,10 @@ class Game:
         """
         clear_screen()
         intro_messages = {
-            GOBLIN_KING_NAME: GOBLIN_KING_INTRO.format(player_name=self.player.name),
-            DARK_SORCERER_NAME: DARK_SORCERER_INTRO.format(player_name=self.player.name)
+            GOBLIN_KING_NAME: GOBLIN_KING_INTRO.format(player_name=self.player.get_name()),
+            DARK_SORCERER_NAME: DARK_SORCERER_INTRO.format(player_name=self.player.get_name())
         }
-        print(intro_messages.get(boss.name, "A new boss appears!"))
+        print(intro_messages.get(boss.get_name(), "A new boss appears!"))
         press_enter()
 
     # Print victory message after defeating an enemy
@@ -196,7 +224,7 @@ class Game:
             enemy: The defeated enemy
         """
         print_border()
-        print(VICTORY_MESSAGE.format(enemy_name=enemy.name))
+        print(VICTORY_MESSAGE.format(enemy_name=enemy.get_name()))
         press_enter()
 
     # Print defeat message after being defeated by an enemy
@@ -208,7 +236,7 @@ class Game:
             enemy: The enemy that defeated the player
         """
         print_border()
-        print(DEFEAT_MESSAGE.format(enemy_name=enemy.name))
+        print(DEFEAT_MESSAGE.format(enemy_name=enemy.get_name()))
         press_enter()
 
     # End the game and show final message
@@ -221,9 +249,9 @@ class Game:
         """
         print_border()
         if player_won:
-            print(GAME_WIN_MESSAGE.format(player_name=self.player.name))
+            print(GAME_WIN_MESSAGE.format(player_name=self.player.get_name()))
         else:
-            print(GAME_OVER_MESSAGE.format(player_name=self.player.name))
+            print(GAME_OVER_MESSAGE.format(player_name=self.player.get_name()))
         print_border()
 
     # Run the game

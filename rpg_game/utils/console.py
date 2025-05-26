@@ -17,9 +17,17 @@ def clear_screen() -> None:
 
 def press_enter() -> None:
     """Prompt the user to press Enter to continue."""
-    input("\nPress Enter to continue...\n")
+    try:
+        input("\nPress Enter to continue...\n")
+    except EOFError:
+        print("\n")
 
 
 def print_border() -> None:
-    """Print a border for visual separation."""
-    print("-" * 80)
+    """Print a border for visual separation with a simple animation effect."""
+    border = "-" * 80
+    print(border)
+    # Simple animation effect
+    for i in range(3):
+        print(" " * i + "🌟" + " " * (78 - i) + "🌟")
+    print(border)
