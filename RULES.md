@@ -123,11 +123,17 @@
 
 ## 2. File Organization
 
-Keep the implementation simple with a single file:
+### Simple Structure for Educational Projects
+- Keep the project structure simple and straightforward
+- Use a modular approach with separate files for different classes/components
+- Avoid complex package structures, setup files, or installation requirements
+- Focus on readability and ease of understanding over technical sophistication
 
-- `rpg_oop_concepts.py` - Contains all game logic and classes
-- Keep related code together in logical sections
-- Use clear section comments to separate different components
+### File Organization Guidelines
+- Group related files in logical directories (e.g., `utils` for utility functions)
+- Use clear, descriptive filenames that indicate their purpose
+- Keep files focused on a single responsibility
+- Use comments to explain file purpose at the top of each file
 
 ## 3. Git Basics
 

@@ -1,13 +1,39 @@
 # RPG Lesson: Object-Oriented Programming 
 
+## Educational Purpose
+
+This project is designed as an educational tool to demonstrate Object-Oriented Programming (OOP) concepts in Python. The code is intentionally structured to be clear, readable, and easy to understand for students learning OOP principles.
+
+## Running the Game
+
+To run the game, simply execute:
+
+```
+python rpg_game/main.py
+```
+
+No installation or setup is required - just clone the repository and run the main file.
 
 ## Project Structure
 
-This is a single-file implementation demonstrating OOP concepts in Python:
+This project uses a simple, modular structure to demonstrate OOP concepts:
 
-- `rpg_oop_concepts.py` - Main game implementation
+### Main Files
+- `rpg_game/main.py` - Entry point to run the game
+- `rpg_game/game.py` - Game class and main game logic
+- `rpg_game/character.py` - Character and Boss classes
+- `rpg_game/weapon.py` - Weapon class implementation
+- `rpg_game/constants.py` - Game constants and configuration
+
+### Utility Files
+- `rpg_game/utils/console.py` - Console UI utilities
+- `rpg_game/utils/logger.py` - Game logging functionality
+
+### Documentation
 - `README.md` - Project documentation
 - `ROADMAP.md` - Development plans
+- `CHANGELOG.md` - Version history and changes
+- `RULES.md` - Project rules and guidelines
 - `UML_class_diagram.md` - Class structure and relationships
 
 ## COIPEA: Core OOP Concepts Demonstrated
@@ -134,9 +160,4 @@ For a detailed analysis of UML concepts in this code, see [UML_class_diagram.md]
 
 ## Future Enhancements
 
-See [ROADMAP.md](ROADMAP.md) for planned improvements, including:
-- Refactoring into a multi-file package structure
-- Adding new character types and abilities
-- Implementing an inventory system
-- Enhancing the combat system
-
+See [ROADMAP.md](ROADMAP.md) for planned improvements.
