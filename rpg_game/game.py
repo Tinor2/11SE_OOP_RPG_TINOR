@@ -41,28 +41,24 @@ class Game:
     
     This class demonstrates orchestration of other classes and game logic.
     """
-    
+
     def __init__(self) -> None:
-        """Initialize a new Game instance."""
+        """Initialize the game."""
+        self.logger = GameLogger()
         self.player: Optional[Character] = None
         self.bosses: List[Boss] = []
-        # Create and manage a GameLogger instance (association)
-        self.logger = GameLogger()
 
-    # Show the introductory message and set up the game
     def show_intro(self) -> None:
         """Display the game introduction and set up the player character."""
         clear_screen()
         print(WELCOME_MESSAGE)
-        try:
-            player_name = input("Enter your character's name: ").capitalize()
-        except EOFError:
-            print("\nUsing default name 'Hero' since input is not available")
-            player_name = "Hero"
+        player_name = input("Enter your character's name: ").strip().capitalize()
+        if not player_name:
+            print("You must enter a name to continue.")
+            return self.show_intro()
         print(INTRO_MESSAGE.format(player_name=player_name))
         self.setup_game(player_name)
 
-    # Set up the game by creating the player character and bosses
     def setup_game(self, name: str) -> None:
         """
         Set up the game with player character and bosses.
@@ -70,10 +66,9 @@ class Game:
         Args:
             name: The player character's name
         """
-        # Get weapon details instead of a Weapon object
         weapon_name, weapon_damage = self.choose_weapon()
         self.player = Character(name, PLAYER_INITIAL_HEALTH, PLAYER_INITIAL_DAMAGE, 
-                               weapon_name, weapon_damage)
+                                weapon_name, weapon_damage)
         self.player.display()
         press_enter()
         self.bosses = [
@@ -81,13 +76,12 @@ class Game:
             Boss(DARK_SORCERER_NAME, DARK_SORCERER_HEALTH, DARK_SORCERER_DAMAGE)
         ]
 
-    # Allow the player to choose a weapon
     def choose_weapon(self) -> Tuple[str, int]:
         """
         Let the player choose a weapon.
         
         Returns:
-            A tuple containing the weapon name and damage bonus
+            Tuple of weapon name and damage bonus
         """
         weapons = [
             {"name": WEAPON_ROCK_NAME, "damage_bonus": WEAPON_ROCK_DAMAGE},
@@ -98,10 +92,8 @@ class Game:
         prompt = "\nChoose your weapon (Rock, Paper, Scissors): "
         choice_index = self.get_valid_input(prompt, options)
         weapon_data = weapons[choice_index]
-        # Return weapon name and damage instead of creating a Weapon object
         return weapon_data["name"], weapon_data["damage_bonus"]
 
-    # Get valid user input for weapon choice
     def get_valid_input(self, prompt: str, options: List[str]) -> int:
         """
         Get valid user input from a list of options.
@@ -123,7 +115,6 @@ class Game:
                 return options.index(user_input)
             print("Invalid input, please try again.")
 
-    # Handle the combat between player and enemy
     def combat(self, player: Character, enemy: Boss) -> bool:
         """
         Handle combat between player and enemy.
@@ -137,59 +128,49 @@ class Game:
         """
         while player.get_health() > 0 and enemy.get_health() > 0:
             self.display_combat_status(player, enemy)
-            # Pass the logger to the attack methods
             damage_dealt = player.attack(enemy, self.logger)
-            # Player attack
             if damage_dealt > 0:
-                print(f"\n  You strike {enemy.get_name()} with your {player._weapon.get_name()}!")
-                print(f"  {enemy.get_name()} takes {damage_dealt} damage!")
+                print(f"\n You strike {enemy.get_name()} with your {player._weapon.get_name()}!")
+                print(f" DEALT {damage_dealt} DAMAGE!")
                 if enemy.get_health() < 30:
-                    print(f"  {enemy.get_name()} is wounded and looks desperate!")
+                    print(f"\n {enemy.get_name()} is wounded and looks desperate!")
             else:
-                print(f"\n  You swing at {enemy.get_name()} but miss!")
-            
-            # Enemy attack
+                print(f"\n You swing at {enemy.get_name()} but miss!")
             damage_received = enemy.attack(player, self.logger)
             if damage_received > 0:
-                print(f"\n  {enemy.get_name()} attacks you!")
-                print(f"  You take {damage_received} damage!")
+                print(f"\n {enemy.get_name()} attacks you!")
+                print(f" TOOK {damage_received} DAMAGE!")
                 if player.get_health() < 30:
-                    print(f"  You're badly hurt! Use a potion if you have one!")
+                    print(f"\n You're badly hurt! Use a potion if you have one!")
             else:
-                print(f"\n  {enemy.get_name()} swings at you but misses!")
-            
-            # Show current status
-            print("\nCurrent Status:")
-            player.display()
-            print("-" * SEPARATOR_LENGTH)
-            enemy.display()
+                print(f"\n {enemy.get_name()} swings at you but misses!")
             press_enter()
-            if enemy.get_health() <= 0:
-                self.print_victory_message(enemy)
-                return True
-            if player.get_health() <= 0:
-                self.print_defeat_message(enemy)
-                return False
-            press_enter()
+        if enemy.get_health() <= 0:
+            self.print_victory_message(enemy)
+            return True
+        if player.get_health() <= 0:
+            self.print_defeat_message(enemy)
+            return False
 
-    # Display the current status of the combat
     def display_combat_status(self, player: Character, enemy: Boss) -> None:
         """
-        Display the current combat status.
+        Display the current combat status with damage amounts.
         
         Args:
             player: The player character
             enemy: The enemy character
         """
         clear_screen()
-        level = "LEVEL 1" if enemy.get_name() == "Goblin King" else "LEVEL 2"
-        print(f"\n=============> {level}: {enemy.get_name()} <=============")
+        level = "LEVEL 1" if enemy.get_name() == GOBLIN_KING_NAME else "LEVEL 2"
+        print(f"\n {'=' * 80}")
+        print(f"{level}: {enemy.get_name()}")
+        print(f" {'=' * 80}")
+        print("\nPlayer Stats:")
         player.display()
-        print("-" * SEPARATOR_LENGTH)
+        print("\nEnemy Stats:")
         enemy.display()
-        print("-" * SEPARATOR_LENGTH)
+        print(f"\n {'=' * 80}")
 
-    # Handle battles with bosses
     def handle_boss_battles(self) -> None:
         """Handle battles with all bosses in sequence."""
         for boss in self.bosses:
@@ -199,7 +180,6 @@ class Game:
                 return
         self.end_game(True)
 
-    # Introduce each boss before the battle
     def introduce_boss(self, boss: Boss) -> None:
         """
         Introduce a boss before battle.
@@ -215,7 +195,6 @@ class Game:
         print(intro_messages.get(boss.get_name(), "A new boss appears!"))
         press_enter()
 
-    # Print victory message after defeating an enemy
     def print_victory_message(self, enemy: Boss) -> None:
         """
         Print a victory message.
@@ -227,7 +206,6 @@ class Game:
         print(VICTORY_MESSAGE.format(enemy_name=enemy.get_name()))
         press_enter()
 
-    # Print defeat message after being defeated by an enemy
     def print_defeat_message(self, enemy: Boss) -> None:
         """
         Print a defeat message.
@@ -239,7 +217,6 @@ class Game:
         print(DEFEAT_MESSAGE.format(enemy_name=enemy.get_name()))
         press_enter()
 
-    # End the game and show final message
     def end_game(self, player_won: bool) -> None:
         """
         End the game and show the final message.
@@ -254,8 +231,11 @@ class Game:
             print(GAME_OVER_MESSAGE.format(player_name=self.player.get_name()))
         print_border()
 
-    # Run the game
     def run(self) -> None:
         """Run the game from start to finish."""
-        self.show_intro()
-        self.handle_boss_battles()
+        try:
+            self.show_intro()
+            self.handle_boss_battles()
+        except Exception as e:
+            print(f"An error occurred: {e}")
+

@@ -13,16 +13,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Console UI with clear battle status displays
 - Victory/defeat conditions and end-game scenarios
 - Test script for verifying imports and basic functionality
+- Inventory system with items, potions, and keys
+- Weapon system with damage bonuses and effects
+- Enhanced logging system for combat events
+- Dynamic health bars and status effects
+- Visual feedback for low health conditions
+- Weapon-specific attack animations and descriptions
 
 ### Changed
 - Improved code organization with better separation of concerns
 - Enhanced documentation and type hints throughout the codebase
 - Updated README with clear instructions and project structure
 - Streamlined game flow and user experience
+- Refactored combat system to use getter methods for proper encapsulation
+- Updated boss attack mechanics with special damage calculations
+- Enhanced character display with visual effects and status indicators
+- Improved error handling for non-interactive environments
+- Added more engaging game messages and level introductions
+- Simplified combat display to show damage amounts and combat results
+- Added proper input validation for weapon selection
+- Improved screen clearing during combat turns
+- Enhanced visual feedback with emojis and borders
 
 ### Fixed
 - Resolved any existing bugs in the combat system
 - Fixed import paths and module organization
+- Fixed attribute access issues with private attributes
+- Resolved EOFError in non-interactive environments
+- Fixed weapon attribute access in character display
+- Fixed missing get_valid_input method causing weapon selection errors
+- Fixed combat display timing and message visibility
+- Fixed screen clearing sequence during combat turns
 
 ## [0.2.0] - 2025-05-26
 
