@@ -5,7 +5,8 @@ This module contains the Character base class and the Boss subclass.
 """
 import sys
 import os
-from typing import Optional, Union
+import random
+from typing import Optional, Union, Tuple
 
 # Add the project directory to the Python path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -28,7 +29,9 @@ class Character:
         health: int, 
         damage: int, 
         weapon_name: str, 
-        weapon_damage_bonus: int
+        weapon_damage_bonus: int,
+        crit_chance: float = 0.1,  # 10% base critical hit chance
+        crit_multiplier: float = 1.5  # 1.5x damage on critical hit
     ) -> None:
         """
         Initialize a new Character.
@@ -36,13 +39,17 @@ class Character:
                 health: The character's initial health
                 damage: The character's base damage
                 weapon_name: The name of the character's weapon
-                 weapon_damage_bonus: The damage bonus from the weapon
+                weapon_damage_bonus: The damage bonus from the weapon
+                crit_chance: The chance to land a critical hit (0.0 to 1.0)
+                crit_multiplier: The damage multiplier for critical hits
         """
         self._name = name
         self._health = health
         self._damage = damage
         self._weapon = Weapon(weapon_name, weapon_damage_bonus)
         self._inventory = Inventory()  # Each character has their own inventory
+        self._crit_chance = min(max(crit_chance, 0.0), 1.0)  # Ensure between 0 and 1
+        self._crit_multiplier = max(crit_multiplier, 1.0)  # Ensure at least 1.0
         # The underscore prefix (_) indicates that this attribute is intended to be "private"
         # - meaning it should only be accessed through the getter and setter methods.
         # This is a convention in Python, not a strict rule enforced by the language.
@@ -67,19 +74,39 @@ class Character:
             self._health = new_health
 
     # Method for the character to attack an enemy
-    def attack(self, enemy: 'Character', logger: Optional[GameLogger] = None) -> int:
+    def attack(self, enemy: 'Character', logger: Optional[GameLogger] = None) -> Tuple[int, bool]:
         """
-        Attack another character.
+        Attack another character with a chance for a critical hit.
         
-        Args:   enemy: The character to attack
-                logger: Optional logger to log the combat
-        Returns:    The total damage dealt
+        Args:
+            enemy: The character to attack
+            logger: Optional logger to log the combat
+            
+        Returns:
+            Tuple containing (total_damage_dealt, was_critical)
         """
-        total_damage = self._damage + self._weapon.get_damage_bonus()
-        if logger:
-            logger.log_combat(self, enemy, total_damage)
+        import random
+        
+        # Calculate base damage
+        base_damage = self._damage + self._weapon.get_damage_bonus()
+        
+        # Check for critical hit
+        is_critical = random.random() < self._crit_chance
+        
+        # Apply critical multiplier if critical hit
+        if is_critical:
+            total_damage = int(base_damage * self._crit_multiplier)
+        else:
+            total_damage = base_damage
+            
+        # Apply damage to enemy
         enemy.set_health(enemy.get_health() - total_damage)
-        return total_damage
+        
+        # Log the attack if logger is provided
+        if logger:
+            logger.log_combat(self, enemy, total_damage, is_critical)
+            
+        return total_damage, is_critical
 
     # Inventory methods
     def add_item(self, item: Item) -> bool:
@@ -180,60 +207,48 @@ class Boss(Character):
     """
     def __init__(self, name: str, health: int, damage: int) -> None:
         """
-        Initialize a new Boss.
-        Args:      name: The boss's name
-                health: The boss's initial health
-                damage: The boss's base damage
+        Initialize a new Boss with enhanced combat abilities.
+        
+        Args:
+            name: The boss's name
+            health: The boss's initial health
+            damage: The boss's base damage
         """
-        # Pass weapon details to parent constructor instead of creating a Weapon object here
-        super().__init__(name, health, damage, "Boss Weapon", 5)
+        # Initialize with higher crit chance (25%) and multiplier (2.0x) than regular characters
+        super().__init__(
+            name=name,
+            health=health,
+            damage=damage,
+            weapon_name="Boss Weapon",
+            weapon_damage_bonus=5,
+            crit_chance=0.25,  # 25% crit chance
+            crit_multiplier=2.0  # 2.0x damage on crit
+        )
 
     # Boss's special attack with additional damage
-    def attack(self, enemy: Character, logger: Optional[GameLogger] = None) -> int:
+    def attack(self, enemy: 'Character', logger: Optional[GameLogger] = None) -> Tuple[int, bool]:
         """
         Attack another character with the boss's special attack.
         
         Overrides the Character.attack method to add additional damage based on the boss's level.
         
-        Args:   enemy: The character to attack
-                logger: Optional logger to log the combat
-        Returns:    The total damage dealt
+        Args:
+            enemy: The character to attack
+            logger: Optional logger to log the combat
+            
+        Returns:
+            Tuple containing (total_damage_dealt, was_critical)
         """
-        # Call the parent class attack method first
-        base_damage = super().attack(enemy, logger)
+        # Call parent's attack method
+        damage, is_critical = super().attack(enemy, logger)
         
-        # Calculate additional damage based on boss's level
-        # Using a more consistent formula for additional damage
-        boss_level = self.get_damage() // 10  # Simple way to determine boss level
-        additional_damage = 3 + boss_level  # Base 3 damage plus level bonus
-        
-        # Apply the additional damage
-        enemy.set_health(enemy.get_health() - additional_damage)
-        
-        # Log the special attack
-        print(f"{self.get_name()} uses a special attack! (+{additional_damage} Damage)")
-        if logger:
-            logger.log_combat(self, enemy, additional_damage)
-        
-        # Return total damage (base + additional)
-        return base_damage + additional_damage
-        # Call the parent class attack method first
-        base_damage = super().attack(enemy, logger)
-        
-        # Calculate additional damage based on boss's level
-        # Using a more consistent formula for additional damage
-        boss_level = self.get_damage() // 10  # Simple way to determine boss level
-        additional_damage = 3 + boss_level  # Base 3 damage plus level bonus
-        
-        # Apply the additional damage
-        enemy.set_health(enemy.get_health() - additional_damage)
-        
-        # Log the special attack
-        print(f"{self.get_name()} uses a special attack! (+{additional_damage} Damage)")
-        if logger:
-            logger.log_combat(self, enemy, additional_damage)
-        
-        # Return total damage (base + additional)
-        return base_damage + additional_damage
-
-    
+        # Boss gets a small chance to deal bonus damage
+        if random.random() < 0.2:  # 20% chance for bonus damage
+            bonus_damage = self._damage // 2
+            enemy.set_health(enemy.get_health() - bonus_damage)
+            if logger:
+                print(f"\n{self._name} uses a powerful attack! (+{bonus_damage} BONUS DAMAGE!)")
+                logger.log_combat(self, enemy, damage + bonus_damage, is_critical=is_critical)
+            return damage + bonus_damage, is_critical
+            
+        return damage, is_critical

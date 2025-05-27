@@ -27,18 +27,30 @@ class GameLogger:
         """
         self.log_to_console = log_to_console
         
-    def log_combat(self, attacker: Any, defender: Any, damage: int) -> None:
+    def log_combat(self, attacker: Any, defender: Any, damage: int, is_critical: bool = False) -> None:
         """
-        Log a combat event.
+        Log a combat event with optional critical hit information.
         
         Args:
             attacker: The attacking character
             defender: The defending character
             damage: The amount of damage dealt
+            is_critical: Whether the attack was a critical hit (default: False)
         """
         # Get current time for the log
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-        log_message = f"[{timestamp}] COMBAT LOG: {attacker.get_name()} attacked {defender.get_name()} for {damage} damage"
+        
+        # Prepare the base log message
+        critical_text = " CRITICAL HIT!" if is_critical else ""
+        log_message = (
+            f"[{timestamp}] COMBAT: {attacker.get_name()} attacked {defender.get_name()}"
+            f" for {damage} damage{critical_text}"
+        )
+        
         if self.log_to_console:
             print(log_message)
+            # Add some visual feedback for critical hits
+            if is_critical:
+                print("✨ CRITICAL HIT! ✨".center(50))
+        
         # Future enhancement: could log to file, database, etc.

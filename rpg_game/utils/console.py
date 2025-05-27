@@ -29,5 +29,5 @@ def print_border() -> None:
     print(border)
     # Simple animation effect
     for i in range(3):
-        print("🌟" + " " * (78 - i) + "🌟")
+        print("🌟" + " " * (78) + "🌟")
     print(border)

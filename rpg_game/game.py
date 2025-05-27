@@ -117,7 +117,7 @@ class Game:
 
     def combat(self, player: Character, enemy: Boss) -> bool:
         """
-        Handle combat between player and enemy.
+        Handle combat between player and enemy with critical hit support.
         
         Args:
             player: The player character
@@ -128,22 +128,36 @@ class Game:
         """
         while player.get_health() > 0 and enemy.get_health() > 0:
             self.display_combat_status(player, enemy)
-            damage_dealt = player.attack(enemy, self.logger)
+            
+            # Player's turn
+            damage_dealt, is_critical = player.attack(enemy, self.logger)
             if damage_dealt > 0:
                 print(f"\n You strike {enemy.get_name()} with your {player._weapon.get_name()}!")
+                if is_critical:
+                    print("✨ CRITICAL HIT! ✨".center(50))
                 print(f" DEALT {damage_dealt} DAMAGE!")
                 if enemy.get_health() < 30:
                     print(f"\n {enemy.get_name()} is wounded and looks desperate!")
             else:
                 print(f"\n You swing at {enemy.get_name()} but miss!")
-            damage_received = enemy.attack(player, self.logger)
+            
+            press_enter()
+            if enemy.get_health() <= 0:
+                break
+                
+            # Enemy's turn
+            self.display_combat_status(player, enemy)
+            damage_received, enemy_critical = enemy.attack(player, self.logger)
             if damage_received > 0:
                 print(f"\n {enemy.get_name()} attacks you!")
+                if enemy_critical:
+                    print("💥 CRITICAL HIT! 💥".center(50))
                 print(f" TOOK {damage_received} DAMAGE!")
                 if player.get_health() < 30:
                     print(f"\n You're badly hurt! Use a potion if you have one!")
             else:
                 print(f"\n {enemy.get_name()} swings at you but misses!")
+                
             press_enter()
         if enemy.get_health() <= 0:
             self.print_victory_message(enemy)

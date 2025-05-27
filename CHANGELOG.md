@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-05-28
+
+### Added
+- Comprehensive test suite for combat system
+- Stress test script to verify combat stability
+- Detailed test cases for critical hits and boss mechanics
+- Console animation improvements for better visual feedback
+
+### Changed
+- Improved console display formatting
+- Enhanced combat log readability
+- Optimized boss bonus attack mechanics
+- Updated documentation for new features
+
+### Fixed
+- Fixed console animation alignment issue
+- Resolved logging inconsistencies in boss combat
+- Addressed edge cases in damage calculation
+- Fixed type hints and improved code quality
+- Ensured proper handling of game state in all combat scenarios
+
 ## [0.3.0] - 2025-05-26
 
 ### Added
