@@ -12,7 +12,7 @@ from typing import Optional, Union, Tuple
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from rpg_game.weapon import Weapon
-from rpg_game.utils.logger import GameLogger
+from rpg_game.game_logger import GameLogger
 from rpg_game.inventory import Inventory, Item, Potion, Key
 
 
@@ -131,21 +131,52 @@ class Character:
         Args:   item_name: The name of the item to use
         Returns:    A message describing the item's effect
         """
-        return self._inventory.use_item(item_name)
+        # Find the item in the inventory
+        item = None
+        for inv_item in self._inventory.items:
+            if inv_item.get_name().lower() == item_name.lower():
+                item = inv_item
+                break
+                
+        if not item:
+            return f"You don't have a {item_name} in your inventory."
+            
+        # Use the item and get the result message
+        result = item.use()
+        
+        # If it's a potion, remove it after use
+        if isinstance(item, Potion):
+            self._inventory.items.remove(item)
+            
+        return result
 
     def display_inventory(self) -> None:
         """
-        Display the contents of the character's inventory.
+        Display the contents of the character's inventory with detailed information.
         """
-        print("\n=== Inventory ===")
-        print(f"Gold: {self._inventory.gold}")
-        print("Items:")
+        print("\n" + "=" * 40)
+        print("INVENTORY".center(40))
+        print("=" * 40)
+        
+        # Display gold
+        print(f"\n💰 GOLD: {self._inventory.gold}")
+        
+        # Display items
+        print("\n📦 ITEMS:")
         items = self._inventory.items
         if not items:
-            print("  - Empty")
-        for item in items:
-            print(f"  - {item.get_name()}: {item.get_description()}")
-        print("==============")
+            print("  Your inventory is empty.")
+        else:
+            for i, item in enumerate(items, 1):
+                item_type = "🧪" if isinstance(item, Potion) else "🔑" if isinstance(item, Key) else "📜"
+                print(f"  {i}. {item_type} {item.get_name()}: {item.get_description()}")
+                
+                # Show additional info for potions
+                if isinstance(item, Potion):
+                    print(f"     Heals: {item.get_heal_amount()} HP")
+                # Add more item type specific info here if needed
+        
+        print("\n" + "=" * 40)
 
     def add_gold(self, amount: int) -> None:
         """

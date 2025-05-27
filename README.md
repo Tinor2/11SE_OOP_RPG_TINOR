@@ -18,16 +18,18 @@ No installation or setup is required - just clone the repository and run the mai
 
 This project uses a simple, modular structure to demonstrate OOP concepts:
 
-### Main Files
+### Core Game Files
 - `rpg_game/main.py` - Entry point to run the game
 - `rpg_game/game.py` - Game class and main game logic
 - `rpg_game/character.py` - Character and Boss classes
 - `rpg_game/weapon.py` - Weapon class implementation
 - `rpg_game/constants.py` - Game constants and configuration
+- `rpg_game/inventory.py` - Inventory and item management
+- `rpg_game/game_logger.py` - Enhanced game logging functionality
 
-### Utility Files
-- `rpg_game/utils/console.py` - Console UI utilities
-- `rpg_game/utils/logger.py` - Game logging functionality
+### Utility Modules
+- `rpg_game/utils/console.py` - Console UI utilities and animations
+- `rpg_game/utils/` - Additional utility modules
 
 ### Documentation
 - `README.md` - Project documentation

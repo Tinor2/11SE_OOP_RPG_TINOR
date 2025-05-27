@@ -12,12 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stress test script to verify combat stability
 - Detailed test cases for critical hits and boss mechanics
 - Console animation improvements for better visual feedback
+- New `game_logger.py` module with enhanced logging capabilities
+- Improved documentation for all modules
 
 ### Changed
+- Moved GameLogger to root of rpg_game directory for better module organization
 - Improved console display formatting
 - Enhanced combat log readability
 - Optimized boss bonus attack mechanics
-- Updated documentation for new features
+- Updated documentation for new features and structure
+- Improved type hints throughout the codebase
 
 ### Fixed
 - Fixed console animation alignment issue
@@ -25,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Addressed edge cases in damage calculation
 - Fixed type hints and improved code quality
 - Ensured proper handling of game state in all combat scenarios
+- Updated import statements to reflect new module structure
 
 ## [0.3.0] - 2025-05-26
 

@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from rpg_game.character import Character, Boss
 from rpg_game.weapon import Weapon
-from rpg_game.utils.logger import GameLogger
+from rpg_game.game_logger import GameLogger
 
 class TestCombat(unittest.TestCase):    
     def setUp(self):

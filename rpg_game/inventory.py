@@ -64,7 +64,7 @@ class Potion(Item):
         Use the potion to heal.
         Returns:    A message describing the healing effect
         """
-        return f"Healed for {self.heal_amount} points"
+        return f"You used {self._name} and recovered {self._heal_amount} HP!"
 
 class Key(Item):
     """
